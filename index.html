@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jump Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body style="margin-left: 20px; margin-top: 40px;">
+    <div>Control Systems - PID Controlled Dino Game</div>
+    <div>Abed El Razzak Chreim</div>
+    <br>
+    <a href="https://raw.githubusercontent.com/AbedElRazzak/portfolioCDN/main/uploads/report-PID-Dino-AbedElRazzakChreim.docx">View Report</a>
+    <br>
+    <a href="https://raw.githubusercontent.com/AbedElRazzak/portfolioCDN/main/uploads/PID-Controlled-Dino-Game-Matlab-Simulation.pdf">View MATLAB Simulation</a>
+    <div class="game">
+        <div id="character" ></div>
+        <div id="block"></div>
+    </div>
+    <p>Score: <span id="scoreSpan"></span></p>
+    <div style="padding-top: 20px; margin-bottom: 20px; margin-left: 20px; display: flex; flex-direction: column;">
+        <strong >Desired Value = Distance between Green obj and Red obj = 45px (Optimal Distance to jump without collision)</strong>
+        <div style="margin-top: 20px;">
+            <input type="checkbox" id="gameWithoutPID">
+            <label for="gameWithoutPID" style="padding-left: 10px;">Play game without PID (use Arrow Up)</label>
+        </div>
+        <div id="pidOutputDisplay">
+
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: space-around; margin-top: 50px;">
+            <div>
+                <label for="P_param" style="padding-left: 10px;">P - parameter</label>
+                <input type="number" id="P_param" value="0.1"></input>
+            </div>
+            <div>
+                <label for="I_param" style="padding-left: 10px;">I - parameter</label>
+                <input type="number" id="I_param" value="0.5"></input>
+            </div>
+            <div>
+                <label for="D_param" style="padding-left: 10px;">D - parameter</label>
+                <input type="number" id="D_param" value="0.1"></input>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <button id="tuneButton" style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">Tune</button>
+        </div>
+        
+
+    </div>
+    
+    <div style="margin-top: 20px; margin-bottom: 20px; margin-left: 20px; display: flex; flex-direction: row; justify-content: space-around;">
+        
+        <div style="display: flex; flex-direction: column; padding-top: 50px;">
+            <strong>Graph: </strong>
+        <strong>X - axis : Time (ms)</strong>
+        <strong>Y - axis : Distance Output from the PID (px)</strong>
+        </div>
+        <div style="display: flex; flex-direction: column; padding-top: 50px;">
+            <strong>PID Params (Optimal): </strong>
+        <strong>P : 0.1</strong>
+        <strong>I : 0.5</strong>
+        <strong>D : 0.1</strong>
+        </div>
+        
+    </div>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+</body>
+<script src="script.js"></script>
+</html>
