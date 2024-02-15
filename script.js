@@ -115,7 +115,7 @@ function pidController(desiredValue, P, I, D) {
     };
 }
 let pidControllerFunction = pidController(45, 0.1, 0.2, 0.1);
-let pidOutput = pidControllerFunction(500, 2);
+let pidOutput = pidControllerFunction(500);
 const tuneButton = document.getElementById('tuneButton');
 tuneButton.addEventListener('click', function () {
     block.style.animation = "none";
