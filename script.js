@@ -214,7 +214,7 @@ function jump(){
             let blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
         
             pidOutput = pidControllerFunction(pidOutput);
-            console.log("PID Output: ", pidOutput, "px")
+            console.log("PID Output: ", pidOutput, "px", "blockLeft: ", blockLeft);
             const outputDiv = document.createElement('strong');
         
                 // Set its content to display "PID Output: " concatenated with the current value
