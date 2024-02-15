@@ -249,7 +249,7 @@ function jump(){
                 // return
             }else{
                 let desiredValue = 45
-                if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
+                if (pidOutput <= desiredValue && pidOutput >= desiredValue - 4 && blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
                     jump();
                     console.log("JUMPED !!!", "pid: ", Math.round(pidOutput));
                 }
