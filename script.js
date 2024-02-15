@@ -93,16 +93,17 @@ function pidController(desiredValue, P, I, D) {
     let currentError = 0;
     let integral = 0;
     let previousError = 0;
+    let timeDifference = 3;
 
     return function(currentValue) {
         // Calculate the error
         currentError = desiredValue - currentValue;
 
         // Update integral term
-        integral += currentError;
+        integral += currentError * timeDifference;
 
         // Calculate derivative term
-        let derivative = currentError - previousError;
+        let derivative = (currentError - previousError) / timeDifference;
 
         // Calculate PID output
         let output = P * currentError + I * integral + D * derivative;
@@ -114,7 +115,7 @@ function pidController(desiredValue, P, I, D) {
     };
 }
 let pidControllerFunction = pidController(45, 0.1, 0.5, 0.1);
-let pidOutput = pidControllerFunction(500);
+let pidOutput = pidControllerFunction(500, 2);
 const tuneButton = document.getElementById('tuneButton');
 tuneButton.addEventListener('click', function () {
     block.style.animation = "none";
@@ -249,9 +250,9 @@ function jump(){
                 // return
             }else{
                 let desiredValue = 45
-                if (pidOutput <= desiredValue && pidOutput >= desiredValue - 4 && blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
+                if (Math.round(pidOutput) <= desiredValue && Math.round(pidOutput) >= desiredValue - 4 && blockLeft <= Math.round(pidOutput) && blockLeft >= Math.round(pidOutput) - 4 && characterTop>=130 && checkbox.checked == false) {
                     jump();
-                    console.log("JUMPED !!!", "pid: ", Math.round(pidOutput));
+                    console.log("JUMPED !!!", "pid: ", pidOutput);
                 }
                 checkbox.addEventListener('change', function() {
                     if (this.checked == false) {
