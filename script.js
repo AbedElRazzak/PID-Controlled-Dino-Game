@@ -37,7 +37,7 @@ document.getElementById('tryAgain').addEventListener('click', function () {
     block.style.animation = "none";
     document.getElementById('tryAgain').style.display = 'none';
 document.getElementById('tryAgainModal').style.display = 'none';
-    cancelAnimationFrame(requestId);
+    clearInterval(checkDead);
     const p = document.getElementById('P_param');
     const i = document.getElementById('I_param');
     const d = document.getElementById('D_param');
@@ -64,11 +64,7 @@ const config = {
 // Initialize the chart
 myChart = new Chart(document.getElementById('myChart').getContext('2d'), config);
 block.style.animation = "block 2s infinite linear";
-    checkDead();
-    setTimeout(() => {
-        // Update the chart
-        myChart.update();
-    }, 3000);
+    checkDeadFunction();
 })
 
 
@@ -119,8 +115,8 @@ const tuneButton = document.getElementById('tuneButton');
 tuneButton.addEventListener('click', function () {
     block.style.animation = "none";
     document.getElementById('tryAgain').style.display = 'none';
-document.getElementById('tryAgainModal').style.display = 'none';
-    cancelAnimationFrame(requestId);
+    document.getElementById('tryAgainModal').style.display = 'none';
+    clearInterval(checkDead);
     const p = document.getElementById('P_param');
     const i = document.getElementById('I_param');
     const d = document.getElementById('D_param');
@@ -147,11 +143,7 @@ const config = {
 // Initialize the chart
 myChart = new Chart(document.getElementById('myChart').getContext('2d'), config);
 block.style.animation = "block 2s infinite linear";
-    checkDead();
-    setTimeout(() => {
-        // Update the chart
-        myChart.update();
-    }, 3000);
+checkDeadFunction();
 })
 // console.log(pidControllerFunction(500));
 
@@ -211,64 +203,72 @@ function jump(){
 
 
     let x = 0
-    function checkDead() {
-        // block.style.animation = "block 2s infinite linear";
-        document.getElementById('tryAgain').style.display = 'none';
-document.getElementById('tryAgainModal').style.display = 'none';
-    let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
-    let blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
-
-    pidOutput = pidControllerFunction(pidOutput);
-    console.log("PID Output: ", pidOutput, "px")
-    const outputDiv = document.createElement('strong');
-
-        // Set its content to display "PID Output: " concatenated with the current value
-        outputDiv.textContent = "PID Output: " + pidOutput;
-        outputDiv.style.display = "flex";
-        outputDiv.style.justifyContent = "center";
-
-        // Clear the content of pidOutputDisplay
-        pidOutputDisplay.innerHTML = '';
-
-        // Append the newly created div element to pidOutputDisplay
-        pidOutputDisplay.appendChild(outputDiv);
-    addData(x, pidOutput);
-
-    if(blockLeft <=20 && blockLeft >= -20 && characterTop>=130){
-        // block.style.animation = "none";
-        // alert("Game Over. score: "+Math.floor(counter/100));
-        document.getElementById('tryAgain').style.display = 'inline-block';
-        document.getElementById('tryAgainModal').style.display = 'flex';
-        block.style.animationPlayState = 'paused';
+    let checkDead;
+    function checkDeadFunction() {
+        checkDead = setInterval(
+            function checkDead() {
+                // block.style.animation = "block 2s infinite linear";
+                document.getElementById('tryAgain').style.display = 'none';
+        document.getElementById('tryAgainModal').style.display = 'none';
+            let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
+            let blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
         
-        counter=0;
-        // block.style.animation = "block 2s infinite linear";
-        // return
-    }else{
-        if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
-            jump();
-            console.log("JUMPED !!!", "pid: ", pidOutput);
-        }
-        checkbox.addEventListener('change', function() {
-            if (this.checked == false) {
-                if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130) {
+            pidOutput = pidControllerFunction(pidOutput);
+            console.log("PID Output: ", pidOutput, "px")
+            const outputDiv = document.createElement('strong');
+        
+                // Set its content to display "PID Output: " concatenated with the current value
+                outputDiv.textContent = "PID Output: " + pidOutput;
+                outputDiv.style.display = "flex";
+                outputDiv.style.justifyContent = "center";
+        
+                // Clear the content of pidOutputDisplay
+                pidOutputDisplay.innerHTML = '';
+        
+                // Append the newly created div element to pidOutputDisplay
+                pidOutputDisplay.appendChild(outputDiv);
+            addData(x, pidOutput);
+        
+            if(blockLeft <=20 && blockLeft >= -20 && characterTop>=130){
+                // block.style.animation = "none";
+                // alert("Game Over. score: "+Math.floor(counter/100));
+                document.getElementById('tryAgain').style.display = 'inline-block';
+                document.getElementById('tryAgainModal').style.display = 'flex';
+                block.style.animationPlayState = 'paused';
+                
+                counter=0;
+                // block.style.animation = "block 2s infinite linear";
+                // return
+            }else{
+                if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
                     jump();
-                    // console.log("JUMPED !!!");
+                    console.log("JUMPED !!!", "pid: ", pidOutput);
                 }
+                checkbox.addEventListener('change', function() {
+                    if (this.checked == false) {
+                        if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130) {
+                            jump();
+                            // console.log("JUMPED !!!");
+                        }
+                    }
+                });
+            
+                counter++;
+                document.getElementById("scoreSpan").innerHTML = Math.floor(counter/100);
             }
-        });
-    
-        counter++;
-        document.getElementById("scoreSpan").innerHTML = Math.floor(counter/100);
+            // requestId = requestAnimationFrame(checkDead); // Schedule the next animation frame
+            x += 1;
+            
+            }, 10)
+            
+            // requestId = requestAnimationFrame(checkDead);
+            setTimeout(() => {
+                // Update the chart
+                myChart.update();
+            }, 3000);
     }
-    requestId = requestAnimationFrame(checkDead); // Schedule the next animation frame
-    x += 1;
+
+
+    checkDeadFunction();
     
-    }
-    
-    requestId = requestAnimationFrame(checkDead);
-    setTimeout(() => {
-        // Update the chart
-        myChart.update();
-    }, 3000);
 // }, 5);
