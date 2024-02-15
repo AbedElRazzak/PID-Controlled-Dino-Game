@@ -36,8 +36,8 @@ document.getElementById('tryAgainModal').style.display = 'none';
 document.getElementById('tryAgain').addEventListener('click', function () {
     block.style.animation = "none";
     document.getElementById('tryAgain').style.display = 'none';
-document.getElementById('tryAgainModal').style.display = 'none';
-    clearInterval(checkDead);
+    document.getElementById('tryAgainModal').style.display = 'none';
+    cancelAnimationFrame(requestId);
     const p = document.getElementById('P_param');
     const i = document.getElementById('I_param');
     const d = document.getElementById('D_param');
@@ -55,16 +55,20 @@ document.getElementById('tryAgainModal').style.display = 'none';
         }]
     };
 
-// Chart configuration
-const config = {
-    type: 'line',
-    data: data,
-};
+    // Chart configuration
+    const config = {
+        type: 'line',
+        data: data,
+    };
 
-// Initialize the chart
-myChart = new Chart(document.getElementById('myChart').getContext('2d'), config);
-block.style.animation = "block 2s infinite linear";
-    checkDeadFunction();
+    // Initialize the chart
+    myChart = new Chart(document.getElementById('myChart').getContext('2d'), config);
+    block.style.animation = "block 2s infinite linear";
+    checkDead();
+    setTimeout(() => {
+        // Update the chart
+        myChart.update();
+    }, 3000);
 })
 
 
@@ -116,7 +120,7 @@ tuneButton.addEventListener('click', function () {
     block.style.animation = "none";
     document.getElementById('tryAgain').style.display = 'none';
     document.getElementById('tryAgainModal').style.display = 'none';
-    clearInterval(checkDead);
+    cancelAnimationFrame(requestId);
     const p = document.getElementById('P_param');
     const i = document.getElementById('I_param');
     const d = document.getElementById('D_param');
@@ -143,7 +147,11 @@ const config = {
 // Initialize the chart
 myChart = new Chart(document.getElementById('myChart').getContext('2d'), config);
 block.style.animation = "block 2s infinite linear";
-checkDeadFunction();
+checkDead();
+setTimeout(() => {
+    // Update the chart
+    myChart.update();
+}, 3000);
 })
 // console.log(pidControllerFunction(500));
 
@@ -203,9 +211,9 @@ function jump(){
 
 
     let x = 0
-    let checkDead;
-    function checkDeadFunction() {
-        checkDead = setInterval(
+    // let checkDead;
+    // function checkDeadFunction() {
+        // checkDead = setInterval(
             function checkDead() {
                 // block.style.animation = "block 2s infinite linear";
                 document.getElementById('tryAgain').style.display = 'none';
@@ -240,9 +248,10 @@ function jump(){
                 // block.style.animation = "block 2s infinite linear";
                 // return
             }else{
+                let desiredValue = 45
                 if (blockLeft <= pidOutput && blockLeft >= pidOutput - 4 && characterTop>=130 && checkbox.checked == false) {
                     jump();
-                    console.log("JUMPED !!!", "pid: ", pidOutput);
+                    console.log("JUMPED !!!", "pid: ", Math.round(pidOutput));
                 }
                 checkbox.addEventListener('change', function() {
                     if (this.checked == false) {
@@ -256,19 +265,20 @@ function jump(){
                 counter++;
                 document.getElementById("scoreSpan").innerHTML = Math.floor(counter/100);
             }
-            // requestId = requestAnimationFrame(checkDead); // Schedule the next animation frame
+            requestId = requestAnimationFrame(checkDead); // Schedule the next animation frame
             x += 1;
+        }
             
-            }, 10)
+            // }, 10)
             
-            // requestId = requestAnimationFrame(checkDead);
+            requestId = requestAnimationFrame(checkDead);
             setTimeout(() => {
                 // Update the chart
                 myChart.update();
             }, 3000);
-    }
 
 
-    checkDeadFunction();
+
+    // checkDeadFunction();
     
 // }, 5);
